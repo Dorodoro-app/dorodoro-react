@@ -1,21 +1,34 @@
 import "./App.css";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Timer from "./componenents/Timer";
 import Settings from "./componenents/Settings";
 
 function App() {
-  const alarmAudio = useRef<HTMLAudioElement>(null);
   const [timerType, setTimerType] = useState("Pomodoro");
   const [noOfPomodoros, setNoOfPomodoros] = useState(1);
-  const [pomodoroLength, setPomodoroLength] = useState(60 * 25);
-  const [shortBreakLength, setShortBreakLength] = useState(60 * 5);
-  const [longBreakLength, setLongBreakLength] = useState(60 * 15);
-  const [alarmType, setAlarmType] = useState("Air Raid");
+  const [pomodoroLength, setPomodoroLength] = useState(60 * 1);
+  const [shortBreakLength, setShortBreakLength] = useState(60 * 1);
+  const [longBreakLength, setLongBreakLength] = useState(60 * 1);
   const [startNextRound, setStartNextRound] = useState(false);
   const [timeLeft, setTimeLeft] = useState(pomodoroLength);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const isTimerStarted = intervalId !== null;
+  const alarmTypes = ["Air Raid", "Chime", "Huricane Warning"];
+  const [currentAlarmType, setCurrentAlarmType] = useState("None");
+  const urls = [
+    "http://soundbible.com/grab.php?id=2056&type=mp3",
+    "http://soundbible.com/grab.php?id=2218&type=mp3",
+    "http://soundbible.com/grab.php?id=1937&type=mp3",
+  ];
+
+  // Map alarm type to url
+  //TODO Get URLS and alarm types from backend
+  const [audioSources] = useState(
+    Object.fromEntries(
+      alarmTypes.map((_, i) => [alarmTypes[i], new Audio(urls[i])])
+    )
+  );
 
   // Decrease Timer Length by one minute
   const decreaseLengthByOneMinute = (
@@ -56,6 +69,7 @@ function App() {
     }
   };
 
+  // Reset everything on button press
   const resetTimer = () => {
     // alarmAudio?.current?.load()
     if (intervalId) {
@@ -67,13 +81,19 @@ function App() {
     setPomodoroLength(pomodoroLength);
     setShortBreakLength(shortBreakLength);
     setLongBreakLength(longBreakLength);
+    if (currentAlarmType !== "None") audioSources[currentAlarmType].pause();
   };
 
+  // Set minimum
   useEffect(() => {
     if (pomodoroLength === 0) {
       setPomodoroLength(60);
+    } else if (shortBreakLength === 0) {
+      setShortBreakLength(60);
+    } else if (longBreakLength === 0) {
+      setLongBreakLength(60);
     }
-  }, [pomodoroLength]);
+  }, [pomodoroLength, shortBreakLength, longBreakLength]);
 
   useEffect(() => {
     if (timeLeft === 0) {
@@ -90,6 +110,7 @@ function App() {
         setTimeLeft(pomodoroLength);
       }
       if (!startNextRound) startPauseTimer();
+      if (currentAlarmType !== "None") audioSources[currentAlarmType].play();
     } else if (timerType === "Pomodoro" && intervalId === null) {
       setTimeLeft(pomodoroLength);
     }
@@ -127,15 +148,12 @@ function App() {
         setShortBreakLength={setShortBreakLength}
         longBreakLength={longBreakLength}
         setLongBreakLength={setLongBreakLength}
-        alarmType={alarmType}
-        setAlarmType={setAlarmType}
+        currentAlarmType={currentAlarmType}
+        setCurrentAlarmType={setCurrentAlarmType}
         startNextRound={startNextRound}
         setStartNextRound={setStartNextRound}
+        alarmTypes={alarmTypes}
       />
-
-      <audio id="alarm" ref={alarmAudio}>
-        <source src="assets/BOMB_SIREN.mp3" type="audio/mpeg" />
-      </audio>
     </div>
   );
 }

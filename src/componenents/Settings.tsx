@@ -9,10 +9,11 @@ const Settings: React.FC<Props> = ({
   setPomodoroLength,
   setShortBreakLength,
   setLongBreakLength,
-  alarmType,
+  currentAlarmType,
   startNextRound,
-  setAlarmType,
+  setCurrentAlarmType,
   setStartNextRound,
+  alarmTypes
 }) => {
   return (
     <div id="settings">
@@ -112,12 +113,10 @@ const Settings: React.FC<Props> = ({
         <label>
           Alarm type
           <select
-            value={alarmType}
-            onChange={(event) => setAlarmType(event.target.value)}
+            value={currentAlarmType}
+            onChange={(event) => setCurrentAlarmType(event.target.value)}
           >
-            <option value="Air Raid">Air Raid</option>
-            <option value="Chime">Chime</option>
-            <option value="Huricane Warning">Huricane Warning</option>
+            {alarmTypes.map((object, i) => <option value={object} key={i}>{object}</option>)}
             <option value="None">None</option>
           </select>
         </label>
@@ -150,13 +149,14 @@ type Props = {
   pomodoroLength: number;
   shortBreakLength: number;
   longBreakLength: number;
-  alarmType: string;
+  currentAlarmType: string;
   startNextRound: boolean;
+  alarmTypes: Array<string>
 
   setPomodoroLength: (newLength: number) => void;
   setShortBreakLength: (newLength: number) => void;
   setLongBreakLength: (newLength: number) => void;
-  setAlarmType: (newAlarm: string) => void;
+  setCurrentAlarmType: (newAlarm: string) => void;
   setStartNextRound: (newStartNextRoundValue: boolean) => void;
 };
 
