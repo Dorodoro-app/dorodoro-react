@@ -8,8 +8,6 @@ momentDurationFormatSetup(moment);
 const Timer: React.FC<Props> = ({
   timeLeft,
   timerType,
-  decreaseLengthByOneMinute,
-  increaseLengthByOneMinute,
   startPauseTimer,
   isTimerStarted
 }) => {
@@ -23,12 +21,6 @@ const Timer: React.FC<Props> = ({
       <button id="start-pause-buttons" onClick={startPauseTimer}>
         {isTimerStarted ? "Pause" : "Start"}
       </button>
-      <button id="plus-minus-buttons" onClick={increaseLengthByOneMinute}>
-        +
-      </button>
-      <button id="plus-minus-buttons" onClick={decreaseLengthByOneMinute}>
-        -
-      </button>
     </div>
   );
 };
@@ -36,8 +28,6 @@ const Timer: React.FC<Props> = ({
 type Props = {
   timeLeft: number
   timerType: string
-  decreaseLengthByOneMinute: () => void
-  increaseLengthByOneMinute: () => void
   startPauseTimer: () => void
   isTimerStarted: boolean
 }
