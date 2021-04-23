@@ -4,14 +4,14 @@ import { useState, useRef, useEffect } from "react";
 import Timer from "./componenents/Timer";
 
 function App() {
-  const alarmAudio = useRef(null);
+  const alarmAudio = useRef<HTMLAudioElement>(null);
   const [timeLeft, setTimeLeft] = useState(60 * 25);
   const [timerType, setTimerType] = useState("Pomodoro");
   const [noOfPomodoros, setNoOfPomodoros] = useState(0);
   const [pomodoroLength, setPomodoroLength] = useState(60 * 25);
   const [shortBreakLength, setShortBreakLength] = useState(60 * 5);
   const [longBreakLength, setLongBreakLength] = useState(60 * 15);
-  const [intervalId, setIntervalId] = useState(null);
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const isTimerStarted = intervalId !== null;
 
   useEffect(() => {
@@ -19,22 +19,24 @@ function App() {
       if (timerType === "Pomodoro" && noOfPomodoros === 1) {
         setTimerType("Long Break");
         setTimeLeft(longBreakLength);
-        setNoOfPomodoros(0)
+        setNoOfPomodoros(0);
       } else if (timerType === "Pomodoro") {
         setTimerType("Short Break");
         setTimeLeft(shortBreakLength);
-        setNoOfPomodoros(noOfPomodoros+1)
+        setNoOfPomodoros(noOfPomodoros + 1);
       } else if (timerType === "Short Break" || timerType === "Long Break") {
         setTimerType("Pomodoro");
         setTimeLeft(pomodoroLength);
-      } 
-      // else if (timerType === "Long Break") {
-      //   setTimerType("Pomodoro");
-      //   setTimeLeft(pomodoroLength);
-      // }
-
+      }
     }
-  }, [timeLeft, shortBreakLength, pomodoroLength, timerType, longBreakLength, noOfPomodoros]);
+  }, [
+    timeLeft,
+    shortBreakLength,
+    pomodoroLength,
+    timerType,
+    longBreakLength,
+    noOfPomodoros,
+  ]);
 
   // Decrease Timer Length by one minute
   const decreaseLengthByOneMinute = () => {
@@ -57,27 +59,26 @@ function App() {
   const startPauseTimer = () => {
     if (isTimerStarted) {
       // Change start timer to pause timer
-      clearInterval(intervalId);
+      if (intervalId !== null) {
+        clearInterval(intervalId);
+      }
       setIntervalId(null);
     } else {
-      // Decrease timer by one second
+      // if we are in stopped mode:
+      // decrement timeLeft by one every second (1000 ms)
+      // to do this we'll use setInterval
       const newIntervalId = setInterval(() => {
-        setTimeLeft((prevTimeLength) => {
-          const currentTime = prevTimeLength - 1;
-
-          if (currentTime >= 0) {
-            return currentTime;
-          }
-          // alarmAudio.current.play()
-        });
-      }, 10);
+        setTimeLeft(prevTimeLeft => prevTimeLeft - 1);
+      }, 100); // TODO: turn back into 1000
       setIntervalId(newIntervalId);
     }
   };
 
   const resetTimer = () => {
-    // alarmAudio.current.load()
-    clearInterval(intervalId);
+    // alarmAudio?.current?.load()
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+    }
     setIntervalId(null);
     setTimerType("Pomodoro");
     setTimeLeft(60 * 25);
@@ -91,13 +92,12 @@ function App() {
       <Timer
         timeLeft={timeLeft}
         timerType={timerType}
-        setTimerType={setTimerType}
         decreaseLengthByOneMinute={decreaseLengthByOneMinute}
         increaseLengthByOneMinute={increaseLengthByOneMinute}
         startPauseTimer={startPauseTimer}
         isTimerStarted={isTimerStarted}
       />
-      
+
       <button id="reset" onClick={resetTimer}>
         Reset
       </button>

@@ -2,9 +2,10 @@ import React from "react";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
 
+// @ts-ignore
 momentDurationFormatSetup(moment);
 
-const Timer = ({
+const Timer: React.FC<Props> = ({
   timeLeft,
   timerType,
   decreaseLengthByOneMinute,
@@ -31,5 +32,14 @@ const Timer = ({
     </div>
   );
 };
+
+type Props = {
+  timeLeft: number
+  timerType: string
+  decreaseLengthByOneMinute: () => void
+  increaseLengthByOneMinute: () => void
+  startPauseTimer: () => void
+  isTimerStarted: boolean
+}
 
 export default Timer;
