@@ -1,12 +1,11 @@
 import React from "react";
-import { useState } from "react";
 import moment from "moment";
 import momentDurationFormatSetup from "moment-duration-format";
 
 momentDurationFormatSetup(moment);
 
 const Timer = ({
-  timerLength,
+  timeLeft,
   timerType,
   decreaseLengthByOneMinute,
   increaseLengthByOneMinute,
@@ -14,7 +13,7 @@ const Timer = ({
   isTimerStarted
 }) => {
   const displayTime = moment
-    .duration(timerLength, "s")
+    .duration(timeLeft, "s")
     .format("mm:ss", { trim: false });
   return (
     <div id="timer">

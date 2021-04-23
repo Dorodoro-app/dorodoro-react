@@ -5,40 +5,51 @@ import Timer from "./componenents/Timer";
 
 function App() {
   const alarmAudio = useRef(null);
-  const [timerLength, setTimerLength] = useState(60 * 25);
-  const [pomodoroLength, setPomodoroLength] = useState(60 * 25);
+  const [timeLeft, setTimeLeft] = useState(60 * 25);
   const [timerType, setTimerType] = useState("Pomodoro");
+  const [noOfPomodoros, setNoOfPomodoros] = useState(0);
+  const [pomodoroLength, setPomodoroLength] = useState(60 * 25);
   const [shortBreakLength, setShortBreakLength] = useState(60 * 5);
   const [longBreakLength, setLongBreakLength] = useState(60 * 15);
   const [intervalId, setIntervalId] = useState(null);
   const isTimerStarted = intervalId !== null;
 
   useEffect(() => {
-    if (timerLength === 0) {
-      if (timerType === "Pomodoro") {
+    if (timeLeft === 0) {
+      if (timerType === "Pomodoro" && noOfPomodoros === 1) {
+        setTimerType("Long Break");
+        setTimeLeft(longBreakLength);
+        setNoOfPomodoros(0)
+      } else if (timerType === "Pomodoro") {
         setTimerType("Short Break");
-        setTimerLength(shortBreakLength);
-      } else if (timerType === "Short Break") {
+        setTimeLeft(shortBreakLength);
+        setNoOfPomodoros(noOfPomodoros+1)
+      } else if (timerType === "Short Break" || timerType === "Long Break") {
         setTimerType("Pomodoro");
-        setTimerLength(pomodoroLength);
-      }
+        setTimeLeft(pomodoroLength);
+      } 
+      // else if (timerType === "Long Break") {
+      //   setTimerType("Pomodoro");
+      //   setTimeLeft(pomodoroLength);
+      // }
+
     }
-  }, [timerLength, shortBreakLength, pomodoroLength, timerType]);
+  }, [timeLeft, shortBreakLength, pomodoroLength, timerType, longBreakLength, noOfPomodoros]);
 
   // Decrease Timer Length by one minute
   const decreaseLengthByOneMinute = () => {
-    const newLength = timerLength - 60;
+    const newLength = timeLeft - 60;
 
     if (newLength > 0) {
-      setTimerLength(newLength);
+      setTimeLeft(newLength);
     }
   };
 
   // Increase Timer Length by one minute
   const increaseLengthByOneMinute = () => {
-    const newTimeLength = timerLength + 60;
+    const newTimeLength = timeLeft + 60;
     if (newTimeLength <= 60 * 60) {
-      setTimerLength(timerLength + 60);
+      setTimeLeft(timeLeft + 60);
     }
   };
 
@@ -51,13 +62,12 @@ function App() {
     } else {
       // Decrease timer by one second
       const newIntervalId = setInterval(() => {
-        setTimerLength((prevTimeLength) => {
+        setTimeLeft((prevTimeLength) => {
           const currentTime = prevTimeLength - 1;
 
           if (currentTime >= 0) {
             return currentTime;
           }
-
           // alarmAudio.current.play()
         });
       }, 10);
@@ -70,7 +80,8 @@ function App() {
     clearInterval(intervalId);
     setIntervalId(null);
     setTimerType("Pomodoro");
-    setTimerLength(60 * 25);
+    setTimeLeft(60 * 25);
+    setPomodoroLength(60 * 25);
     setShortBreakLength(60 * 5);
     setLongBreakLength(60 * 5);
   };
@@ -78,19 +89,15 @@ function App() {
   return (
     <div className="App">
       <Timer
-        timerLength={timerLength}
-        setTimerLength={setTimerLength}
+        timeLeft={timeLeft}
         timerType={timerType}
         setTimerType={setTimerType}
-        shortBreakLength={shortBreakLength}
-        longBreakLength={longBreakLength}
         decreaseLengthByOneMinute={decreaseLengthByOneMinute}
         increaseLengthByOneMinute={increaseLengthByOneMinute}
-        intervalId={intervalId}
         startPauseTimer={startPauseTimer}
         isTimerStarted={isTimerStarted}
       />
-
+      
       <button id="reset" onClick={resetTimer}>
         Reset
       </button>
