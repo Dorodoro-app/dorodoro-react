@@ -9,7 +9,7 @@ const Timer: React.FC<Props> = ({
   timeLeft,
   timerType,
   startPauseTimer,
-  isTimerStarted
+  isTimerStarted,
 }) => {
   const displayTime = moment
     .duration(timeLeft, "s")
@@ -26,10 +26,10 @@ const Timer: React.FC<Props> = ({
 };
 
 type Props = {
-  timeLeft: number
-  timerType: string
-  startPauseTimer: () => void
-  isTimerStarted: boolean
-}
+  timeLeft: number;
+  timerType: string;
+  startPauseTimer: () => void;
+  isTimerStarted: boolean;
+};
 
 export default Timer;

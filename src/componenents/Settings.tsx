@@ -13,7 +13,7 @@ const Settings: React.FC<Props> = ({
   startNextRound,
   setCurrentAlarmType,
   setStartNextRound,
-  alarmTypes
+  alarmTypes,
 }) => {
   return (
     <div id="settings">
@@ -116,7 +116,11 @@ const Settings: React.FC<Props> = ({
             value={currentAlarmType}
             onChange={(event) => setCurrentAlarmType(event.target.value)}
           >
-            {alarmTypes.map((object, i) => <option value={object} key={i}>{object}</option>)}
+            {alarmTypes.map((object, i) => (
+              <option value={object} key={i}>
+                {object}
+              </option>
+            ))}
             <option value="None">None</option>
           </select>
         </label>
@@ -151,7 +155,7 @@ type Props = {
   longBreakLength: number;
   currentAlarmType: string;
   startNextRound: boolean;
-  alarmTypes: Array<string>
+  alarmTypes: Array<string>;
 
   setPomodoroLength: (newLength: number) => void;
   setShortBreakLength: (newLength: number) => void;
