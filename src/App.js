@@ -1,16 +1,29 @@
 import "./App.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import Timer from "./componenents/Timer";
 
 function App() {
-  const alarmAudio = useRef(null)
+  const alarmAudio = useRef(null);
   const [timerLength, setTimerLength] = useState(60 * 25);
+  const [pomodoroLength, setPomodoroLength] = useState(60 * 25);
   const [timerType, setTimerType] = useState("Pomodoro");
   const [shortBreakLength, setShortBreakLength] = useState(60 * 5);
   const [longBreakLength, setLongBreakLength] = useState(60 * 15);
   const [intervalId, setIntervalId] = useState(null);
   const isTimerStarted = intervalId !== null;
+
+  useEffect(() => {
+    if (timerLength === 0) {
+      if (timerType === "Pomodoro") {
+        setTimerType("Short Break");
+        setTimerLength(shortBreakLength);
+      } else if (timerType === "Short Break") {
+        setTimerType("Pomodoro");
+        setTimerLength(pomodoroLength);
+      }
+    }
+  }, [timerLength, shortBreakLength, pomodoroLength, timerType]);
 
   // Decrease Timer Length by one minute
   const decreaseLengthByOneMinute = () => {
@@ -46,16 +59,8 @@ function App() {
           }
 
           // alarmAudio.current.play()
-
-          if (timerType === "Pomodoro") {
-            setTimerType("Break");
-            return shortBreakLength;
-          } else if (timerType === "Break") {
-            setTimerType("Pomodoro");
-            return 60 * 25;
-          }
         });
-      }, 100);
+      }, 10);
       setIntervalId(newIntervalId);
     }
   };
@@ -86,9 +91,11 @@ function App() {
         isTimerStarted={isTimerStarted}
       />
 
-      <button id="reset" onClick={resetTimer}>Reset</button>
+      <button id="reset" onClick={resetTimer}>
+        Reset
+      </button>
 
-      <audio id="alarm" ref={alarmAudio} >
+      <audio id="alarm" ref={alarmAudio}>
         <source src="assets/BOMB_SIREN.mp3" type="audio/mpeg" />
       </audio>
     </div>
