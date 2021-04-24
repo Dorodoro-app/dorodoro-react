@@ -17,7 +17,6 @@ const Settings: React.FC<Props> = ({
 }) => {
   return (
     <div id="settings">
-      <hr></hr>
       <div id="settings-option">
         <label>
           Pomodoro
@@ -155,7 +154,7 @@ type Props = {
   longBreakLength: number;
   currentAlarmType: string;
   startNextRound: boolean;
-  alarmTypes: Array<string>;
+  alarmTypes: string[];
 
   setPomodoroLength: (newLength: number) => void;
   setShortBreakLength: (newLength: number) => void;

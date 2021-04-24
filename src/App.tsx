@@ -1,6 +1,5 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-// import { BrowserRouter as Router } from "react-router-dom";
 
 import Timer from "./componenents/Timer";
 import TimerButtons from "./componenents/TimerButtons";
@@ -22,7 +21,7 @@ function App() {
   const urls = [
     "http://soundbible.com/grab.php?id=2056&type=mp3",
     "http://soundbible.com/grab.php?id=2218&type=mp3",
-    "http://soundbible.com/grab.php?id=1937&type=mp3"
+    "http://soundbible.com/grab.php?id=1937&type=mp3",
   ];
 
   // Map alarm type to url
@@ -133,15 +132,13 @@ function App() {
   // TODO: Create a new component for TimerButtons
   return (
     <div className="App">
-      <Timer
-        timeLeft={timeLeft}
-        timerType={timerType}
-      />
+      <Timer timeLeft={timeLeft} timerType={timerType} />
       <TimerButtons
         resetTimer={resetTimer}
         startPauseTimer={startPauseTimer}
         isTimerStarted={isTimerStarted}
       />
+      <hr></hr>
       <BottomNavigation
         decreaseLengthByOneMinute={decreaseLengthByOneMinute}
         increaseLengthByOneMinute={increaseLengthByOneMinute}

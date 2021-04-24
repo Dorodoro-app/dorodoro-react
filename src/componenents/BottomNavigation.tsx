@@ -1,6 +1,8 @@
 import React from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import Settings from "./Settings";
+import History from "./History";
 
 const BottomNavigation: React.FC<Props> = ({
   decreaseLengthByOneMinute,
@@ -18,30 +20,34 @@ const BottomNavigation: React.FC<Props> = ({
   alarmTypes,
 }) => {
   return (
-    <div>
-      {/* prettier-ignore */}
-      <nav>
-        <ul>
-          <a href="/settings">Settings</a>&nbsp;&nbsp;
-          <a href="/history">History</a>
-        </ul>
-      </nav>
-      <Settings
-        decreaseLengthByOneMinute={decreaseLengthByOneMinute}
-        increaseLengthByOneMinute={increaseLengthByOneMinute}
-        pomodoroLength={pomodoroLength}
-        setPomodoroLength={setPomodoroLength}
-        shortBreakLength={shortBreakLength}
-        setShortBreakLength={setShortBreakLength}
-        longBreakLength={longBreakLength}
-        setLongBreakLength={setLongBreakLength}
-        currentAlarmType={currentAlarmType}
-        setCurrentAlarmType={setCurrentAlarmType}
-        startNextRound={startNextRound}
-        setStartNextRound={setStartNextRound}
-        alarmTypes={alarmTypes}
-      />
-    </div>
+    <Router>
+      <main>
+        <nav>
+          <ul>
+            <a href="/settings">Settings</a>&nbsp;&nbsp;
+            <a href="/history">History</a>
+          </ul>
+        </nav>
+        <Route path="/history" component={History} />
+        <Route path="/settings">
+          <Settings
+            decreaseLengthByOneMinute={decreaseLengthByOneMinute}
+            increaseLengthByOneMinute={increaseLengthByOneMinute}
+            pomodoroLength={pomodoroLength}
+            setPomodoroLength={setPomodoroLength}
+            shortBreakLength={shortBreakLength}
+            setShortBreakLength={setShortBreakLength}
+            longBreakLength={longBreakLength}
+            setLongBreakLength={setLongBreakLength}
+            currentAlarmType={currentAlarmType}
+            setCurrentAlarmType={setCurrentAlarmType}
+            startNextRound={startNextRound}
+            setStartNextRound={setStartNextRound}
+            alarmTypes={alarmTypes}
+          />
+        </Route>
+      </main>
+    </Router>
   );
 };
 

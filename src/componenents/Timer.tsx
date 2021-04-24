@@ -5,10 +5,7 @@ import momentDurationFormatSetup from "moment-duration-format";
 // @ts-ignore
 momentDurationFormatSetup(moment);
 
-const Timer: React.FC<Props> = ({
-  timeLeft,
-  timerType,
-}) => {
+const Timer: React.FC<Props> = ({ timeLeft, timerType }) => {
   const displayTime = moment
     .duration(timeLeft, "s")
     .format("mm:ss", { trim: false });
