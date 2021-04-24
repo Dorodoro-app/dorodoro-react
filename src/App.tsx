@@ -3,25 +3,26 @@ import { useState, useEffect } from "react";
 // import { BrowserRouter as Router } from "react-router-dom";
 
 import Timer from "./componenents/Timer";
+import TimerButtons from "./componenents/TimerButtons";
 import BottomNavigation from "./componenents/BottomNavigation";
 
 function App() {
   // TODO: Send GET request to get configs and status
-  const [timerType, setTimerType] = useState("Pomodoro");
-  const [noOfPomodoros, setNoOfPomodoros] = useState(1);
-  const [pomodoroLength, setPomodoroLength] = useState(60 * 1);
-  const [shortBreakLength, setShortBreakLength] = useState(60 * 1);
-  const [longBreakLength, setLongBreakLength] = useState(60 * 1);
-  const [startNextRound, setStartNextRound] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(pomodoroLength);
+  const [timerType, setTimerType] = useState<string>("Pomodoro");
+  const [noOfPomodoros, setNoOfPomodoros] = useState<number>(1);
+  const [pomodoroLength, setPomodoroLength] = useState<number>(60 * 1);
+  const [shortBreakLength, setShortBreakLength] = useState<number>(60 * 1);
+  const [longBreakLength, setLongBreakLength] = useState<number>(60 * 1);
+  const [startNextRound, setStartNextRound] = useState<boolean>(false);
+  const [timeLeft, setTimeLeft] = useState<number>(pomodoroLength);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const isTimerStarted = intervalId !== null;
-  const alarmTypes = ["Air Raid", "Chime", "Huricane Warning"];
-  const [currentAlarmType, setCurrentAlarmType] = useState("None");
+  const isTimerStarted: boolean = intervalId !== null;
+  const alarmTypes: string[] = ["Air Raid", "Chime", "Huricane Warning"];
+  const [currentAlarmType, setCurrentAlarmType] = useState<string>("None");
   const urls = [
     "http://soundbible.com/grab.php?id=2056&type=mp3",
     "http://soundbible.com/grab.php?id=2218&type=mp3",
-    "http://soundbible.com/grab.php?id=1937&type=mp3",
+    "http://soundbible.com/grab.php?id=1937&type=mp3"
   ];
 
   // Map alarm type to url
@@ -129,18 +130,18 @@ function App() {
     startNextRound,
   ]);
 
-  // TODO: Create a new component for Buttons
+  // TODO: Create a new component for TimerButtons
   return (
     <div className="App">
       <Timer
         timeLeft={timeLeft}
         timerType={timerType}
+      />
+      <TimerButtons
+        resetTimer={resetTimer}
         startPauseTimer={startPauseTimer}
         isTimerStarted={isTimerStarted}
       />
-      <button id="reset" onClick={resetTimer}>
-        Reset
-      </button>
       <BottomNavigation
         decreaseLengthByOneMinute={decreaseLengthByOneMinute}
         increaseLengthByOneMinute={increaseLengthByOneMinute}
