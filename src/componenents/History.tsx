@@ -1,12 +1,23 @@
 import React from "react";
 
-const History = () => {
+const History: React.FC<Props> = ({ datesWithTotalPomodoros }) => {
+  const datesArray = Object.keys(datesWithTotalPomodoros);
   return (
-    <div>
-      <h3>Date 1</h3>
-      <p>Pomodoros Completed - {2}</p>
+    <div id="history-date-box">
+      {datesArray.map((object, i) => (
+        <div key={i}>
+          <h3 id="history-date-heading">{object}</h3>
+          <p id="history-date-pomodoro-count">
+            Pomodoros Completed - {datesWithTotalPomodoros[object]}
+          </p>
+        </div>
+      ))}
     </div>
   );
+};
+
+type Props = {
+  datesWithTotalPomodoros: Object;
 };
 
 export default History;

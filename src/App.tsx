@@ -16,6 +16,7 @@ function App() {
   const [timeLeft, setTimeLeft] = useState<number>(pomodoroLength);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const isTimerStarted: boolean = intervalId !== null;
+  const [datesWithTotalPomodoros] = useState<Object>({ "4/21/2021": 5 });
   const alarmTypes: string[] = ["Air Raid", "Chime", "Huricane Warning"];
   const [currentAlarmType, setCurrentAlarmType] = useState<string>("None");
   const urls = [
@@ -30,6 +31,16 @@ function App() {
       alarmTypes.map((_, i) => [alarmTypes[i], new Audio(urls[i])])
     )
   );
+
+  const updateHistory = () => {
+    const currentDate = new Date().toLocaleDateString();
+
+    if (datesWithTotalPomodoros[currentDate] === undefined) {
+      datesWithTotalPomodoros[currentDate] = 1;
+    } else {
+      datesWithTotalPomodoros[currentDate] += 1;
+    }
+  };
 
   // Decrease Timer Length by one minute
   const decreaseLengthByOneMinute = (
@@ -104,10 +115,12 @@ function App() {
         setTimerType("Long Break");
         setTimeLeft(longBreakLength);
         setNoOfPomodoros(1);
+        updateHistory();
       } else if (timerType === "Pomodoro") {
         setTimerType("Short Break");
         setTimeLeft(shortBreakLength);
         setNoOfPomodoros(noOfPomodoros + 1);
+        updateHistory();
       } else if (timerType === "Short Break" || timerType === "Long Break") {
         setTimerType("Pomodoro");
         setTimeLeft(pomodoroLength);
@@ -153,6 +166,7 @@ function App() {
         startNextRound={startNextRound}
         setStartNextRound={setStartNextRound}
         alarmTypes={alarmTypes}
+        datesWithTotalPomodoros={datesWithTotalPomodoros}
       />
     </div>
   );

@@ -18,6 +18,7 @@ const BottomNavigation: React.FC<Props> = ({
   setCurrentAlarmType,
   setStartNextRound,
   alarmTypes,
+  datesWithTotalPomodoros,
 }) => {
   return (
     <Router>
@@ -28,7 +29,6 @@ const BottomNavigation: React.FC<Props> = ({
             <a href="/history">History</a>
           </ul>
         </nav>
-        <Route path="/history" component={History} />
         <Route path="/settings">
           <Settings
             decreaseLengthByOneMinute={decreaseLengthByOneMinute}
@@ -45,6 +45,9 @@ const BottomNavigation: React.FC<Props> = ({
             setStartNextRound={setStartNextRound}
             alarmTypes={alarmTypes}
           />
+        </Route>
+        <Route path="/history">
+          <History datesWithTotalPomodoros={datesWithTotalPomodoros} />
         </Route>
       </main>
     </Router>
@@ -67,6 +70,7 @@ type Props = {
   currentAlarmType: string;
   startNextRound: boolean;
   alarmTypes: Array<string>;
+  datesWithTotalPomodoros: Object;
 
   setPomodoroLength: (newLength: number) => void;
   setShortBreakLength: (newLength: number) => void;
