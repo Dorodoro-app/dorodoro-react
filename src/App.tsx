@@ -1,10 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+// import { BrowserRouter as Router } from "react-router-dom";
 
 import Timer from "./componenents/Timer";
-import Settings from "./componenents/Settings";
+import BottomNavigation from "./componenents/BottomNavigation";
 
 function App() {
+  // TODO: Send GET request to get configs and status
   const [timerType, setTimerType] = useState("Pomodoro");
   const [noOfPomodoros, setNoOfPomodoros] = useState(1);
   const [pomodoroLength, setPomodoroLength] = useState(60 * 1);
@@ -23,7 +25,6 @@ function App() {
   ];
 
   // Map alarm type to url
-  //TODO Get URLS and alarm types from backend
   const [audioSources] = useState(
     Object.fromEntries(
       alarmTypes.map((_, i) => [alarmTypes[i], new Audio(urls[i])])
@@ -64,9 +65,10 @@ function App() {
     } else {
       const newIntervalId = setInterval(() => {
         setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
-      }, 10); // TODO: turn back into 1000
+      }, 10); // TODO: Turn it back to 1000
       setIntervalId(newIntervalId);
     }
+    // TODO: Send PUT request to update status
   };
 
   // Reset everything on button press
@@ -82,9 +84,10 @@ function App() {
     setShortBreakLength(shortBreakLength);
     setLongBreakLength(longBreakLength);
     if (currentAlarmType !== "None") audioSources[currentAlarmType].pause();
+    // TODO: Send PUT request to update status
   };
 
-  // Set minimum
+  // Set minimum value for time lengths
   useEffect(() => {
     if (pomodoroLength === 0) {
       setPomodoroLength(60);
@@ -126,6 +129,7 @@ function App() {
     startNextRound,
   ]);
 
+  // TODO: Create a new component for Buttons
   return (
     <div className="App">
       <Timer
@@ -134,12 +138,10 @@ function App() {
         startPauseTimer={startPauseTimer}
         isTimerStarted={isTimerStarted}
       />
-
       <button id="reset" onClick={resetTimer}>
         Reset
       </button>
-
-      <Settings
+      <BottomNavigation
         decreaseLengthByOneMinute={decreaseLengthByOneMinute}
         increaseLengthByOneMinute={increaseLengthByOneMinute}
         pomodoroLength={pomodoroLength}
